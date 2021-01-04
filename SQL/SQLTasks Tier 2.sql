@@ -105,16 +105,16 @@ Order by descending cost, and do not use any subqueries. */
 
 SELECT f.name facilityname, CONCAT( firstname, ' ', surname ) membername,
 CASE WHEN m.firstname = 'GUEST'
-THEN guestcost *2
-ELSE membercost *2
+THEN guestcost * slots
+ELSE membercost * slots
 END AS cost
 FROM Bookings b
 INNER JOIN Members m ON b.memid = m.memid
 INNER JOIN Facilities f ON b.facid = f.facid
 WHERE DATE_FORMAT( starttime, '%Y-%m-%d' ) = '2012-09-14'
 AND CASE WHEN m.firstname = 'GUEST'
-THEN guestcost *2 >30
-ELSE membercost *2 >30
+THEN guestcost * slots >30
+ELSE membercost * slots >30
 END
 ORDER BY cost DESC
 
@@ -122,11 +122,10 @@ ORDER BY cost DESC
 
 SELECT facilityname, CONCAT( firstname, ' ', surname ) membername, cost
 FROM (
-
 SELECT firstname, surname,
 CASE WHEN m.firstname = 'GUEST'
-THEN guestcost *2
-ELSE membercost *2
+THEN guestcost * slots
+ELSE membercost * slots
 END AS cost, f.name facilityname
 FROM Bookings b
 INNER JOIN Members m ON b.memid = m.memid
@@ -148,8 +147,8 @@ that there's a different 	cost for guests and members! */
 
 WITH fac_details AS (select f.facid, f.name facilityname, 
 CASE WHEN m.firstname = 'GUEST'
-    THEN guestcost *2
-    ELSE membercost *2
+    THEN guestcost * slots
+    ELSE membercost * slots
     END AS cost
 from Bookings b
 INNER JOIN Members m ON b.memid = m.memid
